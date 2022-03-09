@@ -1,5 +1,7 @@
 from tkinter import *
 from tkinter import filedialog
+from PIL import ImageGrab
+import datetime
 
 def getResource():
     path = filedialog.askopenfilename(initialdir="./png", title="Select file", filetypes=(("png files", "*.png"), ("jpg files", "*.jpg"), ("all files", "*.*")))
@@ -23,7 +25,19 @@ def setImage(path):
     lbl.pack()
     
     return
+
+def makeScreenshot():
+    # 스크린샷 저장
+    x1 = my_frame.winfo_rootx()
+    y1 = my_frame.winfo_rooty()
+    x2 = x1 + my_frame.winfo_width()
+    y2 = y1 + my_frame.winfo_height()
     
+    print(my_frame.winfo_width(), my_frame.winfo_height())
+    img = ImageGrab.grab(bbox=(x1, y1, x2, y2))
+    # 현재 날짜의 시간으로 저장.
+    img.save(datetime.datetime.now().strftime("%Y%m%d%H%M%S") + ".png")
+    return
 
 width = 900
 height = 600
@@ -47,7 +61,7 @@ def on_resize(root, frame):
     return 
 
 root.bind("<Configure>", lambda e: on_resize(root, my_frame))
-
+root.bind("<F2>", lambda e: makeScreenshot())
 menu = Menu(root)
 
 menu_option = Menu(menu, tearoff=0)
