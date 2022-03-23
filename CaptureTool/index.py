@@ -44,9 +44,13 @@ def makeScreenshot():
 def Record():
     if rV.isRecording:
         print("레코딩 강제 종료.")
+        root.configure(bg="white")
+        root.update()
         rV.isRecording = False
         return
     print("레코딩 시작")
+    root.configure(bg="red")
+    root.update()
     x1 = my_frame.winfo_rootx()
     y1 = my_frame.winfo_rooty()
     x2 = x1 + my_frame.winfo_width()

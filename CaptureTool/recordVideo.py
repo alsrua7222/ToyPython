@@ -31,7 +31,7 @@ class recordVideo:
     def StartRecord(self, root: Tk, point):
         if self.isRecording:
             return
-
+        root.wm_attributes("-topmost", True)
         width = point[2] - point[0]
         height = point[3] - point[1]
         codec = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
@@ -54,6 +54,7 @@ class recordVideo:
         return
 
     def StopRecord(self, root: Tk):
+        root.attributes("-topmost", False)
         cv2.destroyAllWindows()
         self.output.release()
         return
