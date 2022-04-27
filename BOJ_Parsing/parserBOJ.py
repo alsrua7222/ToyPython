@@ -1,4 +1,4 @@
-import re, requests
+import requests
 from bs4 import BeautifulSoup
 
 class Parse:
@@ -36,6 +36,7 @@ class Parse:
                 tmp.append(sub[0].text)
                 tmp.append(int(sub[1].text))
                 tmp.append(int(sub[2].text))
+                tmp.append(float(sub[3].text))
                 collect.append(tmp)
         return collect
 
