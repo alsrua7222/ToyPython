@@ -11,13 +11,11 @@ class Parse:
         else:
             return requests.get(url)
 
-    def processParsing(self, DEBUG=False):
+    def processParsing(self, DEBUG=False, MAX_PAGE=150):
         # url 옵션 = 채점 할 수가 없는 문제, 번외 문제 제외함. 문제번호 오름차순
         # 현재 최대 페이지 수는 150. - 22/4/27
-        MAX_PAGE = 150
-        
         collect = []
-        for page in range(1, 3+1):
+        for page in range(1, MAX_PAGE+1):
             url = f"https://www.acmicpc.net/problemset?sort=no_asc&solvedac_option=xz%2Cxn&style=off%2Ccs&style_if=nand&page={page}"
             res = self.getResource(url, True)
             
@@ -27,16 +25,24 @@ class Parse:
             bs = BeautifulSoup(res.text, "html.parser")
 
             table_row = bs.find("div", {"class": "table-responsive"}).find("tbody").find_all("tr")
-            for v in table_row:
+            for tr in table_row:
                 tmp = []
-                id = v.find("td", {"class": "list_problem_id"}).text
-                sub = v.find_all("a")
-                    
-                tmp.append(int(id))
-                tmp.append(sub[0].text)
-                tmp.append(int(sub[1].text))
-                tmp.append(int(sub[2].text))
-                tmp.append(float(sub[3].text))
+                td = tr.find_all("td")
+                
+                # id
+                tmp.append(int(td[0].text))
+
+                # title
+                tmp.append(td[1].find("a").text)
+                
+                # solved
+                tmp.append(int(td[3].find("a").text))
+
+                # submit
+                tmp.append(int(td[4].find("a").text))
+
+                # ac_rate
+                tmp.append(float(td[5].text[:-1]))
                 collect.append(tmp)
         return collect
 
@@ -44,4 +50,4 @@ class Parse:
 
 if __name__ == "__main__":
     p = Parse()
-    print(*p.processParsing(), sep="\n")
+    print(*p.processParsing(DEBUG=False, MAX_PAGE=1), sep="\n")

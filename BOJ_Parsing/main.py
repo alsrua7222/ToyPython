@@ -13,7 +13,7 @@ for seq, name in enumerate(col_names):
 
 row_num = 2
 # 데이터 입력
-for n, rows in enumerate(parse.processParsing()):
+for n, rows in enumerate(parse.processParsing(DEBUG=False, MAX_PAGE=150)):
     for seq, value in enumerate(rows):
         ws.cell(row=row_num+n, column=seq+1, value=value)
 wb.save("BOJ_Parsing.xlsx")
